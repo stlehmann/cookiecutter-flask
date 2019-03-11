@@ -1,3 +1,4 @@
 {
-    "project_name": "flask_app"
+    "project_name": "flask_app",
+    "database_uri": "sqlite:///data.sqlite"
 }

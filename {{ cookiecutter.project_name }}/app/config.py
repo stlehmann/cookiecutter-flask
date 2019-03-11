@@ -5,7 +5,7 @@
 
 :created on 2019-03-11 19:39:50
 :last modified by:   stefan
-:last modified time: 2019-03-11 19:42:24
+:last modified time: 2019-03-11 19:57:19
 
 """
 
@@ -15,6 +15,7 @@ class Config:
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     SECRET_KEY = 'my secret key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = "{{ cookiecutter.database_uri }}"
     TEMPLATES_AUTO_RELOAD = False
 
 
