@@ -1,0 +1,8 @@
+flask
+flask-admin
+flask-sqlalchemy
+flask-migrate
+flask-login
+flask-uploads
+flask-debugtoolbar
+python-dotenv
