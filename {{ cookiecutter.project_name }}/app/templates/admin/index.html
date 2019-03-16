@@ -1,0 +1,21 @@
+{% raw %}
+{% extends 'admin/master.html' %} {% from 'bootstrap/wtf.html' import form_field %} {% block body %} {{ super() }}
+<div class="row-fluid">
+  <div>
+    {% if not current_user.is_authenticated %}
+    <form method="POST" action="">
+      {{ form.hidden_tag() if form.hidden_tag }} {% for f in form if f.type != 'CSRFTokenField' %}
+      <div>
+        {{ form_field(f) }}
+      </div>
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">Anmelden</button> oder
+      <a class="" href="{{ url_for('main.index') }}">Zurück</a>
+    </form>
+    {% else %}
+      <a class="btn btn-default" href="{{ url_for('main.index') }}">Zurück zur Website</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}
+{% endraw %}
