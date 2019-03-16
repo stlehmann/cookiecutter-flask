@@ -2,3 +2,4 @@
 __pycache__/
 *.sublime-*
 myapp/
+flask_app/*
