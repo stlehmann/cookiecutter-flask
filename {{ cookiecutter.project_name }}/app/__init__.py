@@ -1,8 +1,6 @@
 import os
-import click
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_migrate import Migrate
@@ -20,7 +18,7 @@ login_manager = LoginManager()
 login_manager.login_view = "admin.login"
 
 
-from .admin.modelviews import MyAdminIndexView, UserModelView
+from .admin.modelviews import MyAdminIndexView, UserModelView  # noqa: E402
 admin = Admin(
     name="{{ cookiecutter.project_name }}",
     index_view=MyAdminIndexView(),
