@@ -1,5 +1,6 @@
 flask
 flask-admin
+flask-assets
 flask-bootstrap
 flask-sqlalchemy
 flask-migrate

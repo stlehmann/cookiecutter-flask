@@ -1,6 +1,12 @@
 {% raw %}
 {% extends "bootstrap/base.html" %}
 
+{% block styles %}
+  {{ super() }}
+  {% assets 'sass' %}
+    <link href="{{ ASSET_URL }}" rel="stylesheet">
+  {% endassets %}
+{% endblock %}
 
 {% block navbar %}
 <nav class="navbar navbar-default" role="navigation">

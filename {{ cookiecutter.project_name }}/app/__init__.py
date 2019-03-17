@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_assets import Environment, Bundle
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -12,6 +13,7 @@ from .config import config
 
 db = SQLAlchemy()
 migrate = Migrate()
+assets = Environment()
 toolbar = DebugToolbarExtension()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
@@ -37,6 +39,13 @@ def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
     bootstrap.init_app(app)
     toolbar.init_app(app)
     login_manager.init_app(app)
+
+    # webassets
+    assets.init_app(app)
+    sass = Bundle(
+        "styles.sass", filters="sass", output="styles.css"
+    )
+    assets.register("sass", sass)
 
     # register blueprints
     app.register_blueprint(main)
