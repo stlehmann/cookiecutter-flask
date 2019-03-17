@@ -4,13 +4,15 @@
 
 :created on 2019-03-15 18:17:57
 :last modified by:   stefan
-:last modified time: 2019-03-15 18:49:20
+:last modified time: 2019-03-17 19:13:24
 
 """
 import flask_login as login
 from flask import redirect, url_for, request, flash
 from flask_admin import AdminIndexView, expose, helpers
+from flask_admin.form import rules
 from flask_admin.contrib.sqla import ModelView
+from wtforms.fields import PasswordField
 from .forms import LoginForm
 
 
@@ -65,5 +67,12 @@ class SuperuserModelView(ModelView):
 
 class UserModelView(SuperuserModelView):
     """ModelView for user management."""
+    column_list = ["username", "role", "email"]
 
-    pass
+    form_rules = [
+        rules.FieldSet(("username", "role", "email", "password"))
+    ]
+
+    form_extra_fields = {
+        "password": PasswordField("Password")
+    }
