@@ -9,3 +9,5 @@ flask-uploads
 flask-debugtoolbar
 python-dotenv
 gunicorn
+libsass
+pillow
