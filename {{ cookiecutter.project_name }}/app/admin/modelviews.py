@@ -3,17 +3,30 @@
 :license: MIT, see license file or https://opensource.org/licenses/MIT
 
 :created on 2019-03-15 18:17:57
-:last modified by:   stefan
-:last modified time: 2019-03-17 19:13:24
+:last modified by:   Stefan Lehmann
+:last modified time: 2019-06-02 21:10:53
 
 """
+import os
 import flask_login as login
 from flask import redirect, url_for, request, flash
-from flask_admin import AdminIndexView, expose, helpers
+from flask_admin import AdminIndexView, expose, helpers, form
 from flask_admin.form import rules
 from flask_admin.contrib.sqla import ModelView
+from jinja2 import Markup
 from wtforms.fields import PasswordField
 from .forms import LoginForm
+from ..config import IMAGE_DIR
+from .. import images
+
+
+def _list_thumbnail(view, context, model, name):
+    if not model.filename:
+        return ""
+
+    return Markup(
+        '<img src="{model.url}" style="width: 150px;">'.format(model=model)
+    )
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -63,6 +76,43 @@ class SuperuserModelView(ModelView):
             and login.current_user.is_authenticated
             and login.current_user._get_current_object().is_administrator()
         )
+
+
+class ImageModelView(SecureModelView):
+    """ModelView for images."""
+
+    edit_template = "/admin/edit_image.html"
+    create_template = "/admin/edit_image.html"
+
+    column_list = ["image", "filename"]
+
+    column_labels = {"image": "Bild", "filename": "Dateiname"}
+
+    column_formatters = {"image": _list_thumbnail}
+
+    form_extra_fields = {
+        "image": form.ImageUploadField(
+            "Bild", base_path=IMAGE_DIR, url_relative_path="images/"
+        )
+    }
+
+    # form_rules = [rules.FieldSet(("filename",))]
+
+    def on_model_change(self, form, model, is_created):
+
+        if form.image.data is None:
+            if request.form["filename"] != request.form["old_filename"]:
+                os.rename(
+                    images.path(request.form["old_filename"]),
+                    images.path(request.form["filename"])
+                )
+
+        else:
+            if form.filename.data != form.image.data.filename:
+                os.rename(
+                    images.path(form.image.data.filename),
+                    images.path(form.filename.data)
+                )
 
 
 class UserModelView(SuperuserModelView):
