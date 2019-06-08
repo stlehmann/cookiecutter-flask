@@ -8,7 +8,7 @@ alembic==1.0.10           # via flask-migrate
 blinker==1.4              # via flask-debugtoolbar
 click==7.0                # via flask
 dominate==2.3.5           # via flask-bootstrap
-flask-admin==1.5.3
+flask-admin==1.5.2
 flask-assets==0.12
 flask-bootstrap==3.3.7.1
 flask-debugtoolbar==0.10.1
@@ -21,7 +21,7 @@ gunicorn==19.9.0
 itsdangerous==1.1.0       # via flask, flask-debugtoolbar
 jinja2==2.10.1            # via flask
 libsass==0.19.1
-mako==1.0.11              # via alembic
+mako==1.0.12              # via alembic
 markupsafe==1.1.1         # via jinja2, mako
 pillow==6.0.0
 python-dateutil==2.8.0    # via alembic
