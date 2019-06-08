@@ -1,0 +1,13 @@
+{% raw %}
+{% extends 'admin/model/edit.html' %}
+
+{% block tail %}
+<script>
+  $('form.admin-form').append('<input id="old_filename" name="old_filename" value="{% if model is defined %}{{ model.filename }}{% endif %}" style="display: none;">');
+
+  $('#file').on('change', function() {
+    $('#filename').val($(this).val().split('\\').pop());
+  });
+</script>
+{% endblock tail %}
+{% endraw %}

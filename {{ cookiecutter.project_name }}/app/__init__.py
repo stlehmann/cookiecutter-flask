@@ -29,11 +29,16 @@ images = UploadSet("images", IMAGES)
 files = UploadSet("files", DEFAULTS)
 
 
-from .admin.modelviews import MyAdminIndexView, UserModelView, ImageModelView  # noqa: E402
+from .admin.modelviews import (
+    MyAdminIndexView,
+    UserModelView,
+    ImageModelView,
+    FileModelView,
+)  # noqa: E402
+
 admin = Admin(
-    name="flask_app",
-    index_view=MyAdminIndexView(),
-    template_mode="bootstrap3")
+    name="flask_app", index_view=MyAdminIndexView(), template_mode="bootstrap3"
+)
 
 
 def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
@@ -55,17 +60,17 @@ def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
 
     # webassets
     assets.init_app(app)
-    sass = Bundle(
-        "styles.sass", filters="libsass", output="styles.css"
-    )
+    sass = Bundle("styles.sass", filters="libsass", output="styles.css")
     assets.register("sass", sass)
 
     # register blueprints
     app.register_blueprint(main)
 
     # Admin views
-    from .models import User, Image
+    from .models import User, Image, File
+
     admin.add_view(ImageModelView(Image, db.session, name="Bilder"))
+    admin.add_view(FileModelView(File, db.session, name="Dateien"))
     admin.add_view(UserModelView(User, db.session, name="Benutzer"))
 
     return app

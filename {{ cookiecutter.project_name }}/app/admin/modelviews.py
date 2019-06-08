@@ -3,8 +3,8 @@
 :license: MIT, see license file or https://opensource.org/licenses/MIT
 
 :created on 2019-03-15 18:17:57
-:last modified by:   Stefan Lehmann
-:last modified time: 2019-06-02 21:10:53
+:last modified by:   stefan
+:last modified time: 2019-06-08 15:57:55
 
 """
 import os
@@ -16,8 +16,8 @@ from flask_admin.contrib.sqla import ModelView
 from jinja2 import Markup
 from wtforms.fields import PasswordField
 from .forms import LoginForm
-from ..config import IMAGE_DIR
-from .. import images
+from ..config import IMAGE_DIR, FILE_DIR
+from .. import images, files
 
 
 def _list_thumbnail(view, context, model, name):
@@ -83,6 +83,7 @@ class ImageModelView(SecureModelView):
 
     edit_template = "/admin/edit_image.html"
     create_template = "/admin/edit_image.html"
+    list_template = "/admin/list_file.html"
 
     column_list = ["image", "filename"]
 
@@ -112,6 +113,36 @@ class ImageModelView(SecureModelView):
                 os.rename(
                     images.path(form.image.data.filename),
                     images.path(form.filename.data)
+                )
+
+
+class FileModelView(SecureModelView):
+    """ModelView for files."""
+
+    edit_template = "/admin/edit_file.html"
+    create_template = "/admin/edit_file.html"
+    list_template = "/admin/list_file.html"
+
+    form_extra_fields = {
+        "file": form.FileUploadField(
+            "Datei", base_path=FILE_DIR
+        )
+    }
+
+    def on_model_change(self, form, model, is_created):
+
+        if form.file.data is None:
+            if request.form["filename"] != request.form["old_filename"]:
+                os.rename(
+                    files.path(request.form["old_filename"]),
+                    files.path(request.form["filename"])
+                )
+
+        else:
+            if form.filename.data != form.file.data.filename:
+                os.rename(
+                    files.path(form.file.data.filename),
+                    files.path(form.filename.data)
                 )
 
 

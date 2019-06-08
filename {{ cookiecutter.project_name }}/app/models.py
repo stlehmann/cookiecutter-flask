@@ -5,31 +5,66 @@
 
 :created on 2019-03-12 18:08:55
 :last modified by:   stefan
-:last modified time: 2019-06-02 19:54:37
+:last modified time: 2019-06-08 14:04:37
 
 """
-from . import db, login_manager, images
+import os
+from . import db, login_manager, images, files
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.event import listens_for
 
 
-class Image(db.Model):
-    """Image model."""
-
-    __tablename__ = "images"
+class FileMixin(db.Model):
+    """Mixin for file handling."""
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(256), unique=True)
+    filename = db.Column(db.String(256), unique=True, nullable=False)
+    _upload_set = None
 
     def __repr__(self):
         return self.filename
 
     @property
     def url(self):
-        return images.url(self.filename)
+        return self._upload_set.url(self.filename)
 
     @property
     def filepath(self):
-        return images.path(self.filename)
+        return self._upload_set.path(self.filename)
+
+
+class Image(FileMixin, db.Model):
+    """Image model."""
+
+    __tablename__ = "images"
+    _upload_set = images
+
+
+@listens_for(Image, "after_delete")
+def delete_image(mapper, connection, target):
+    if target.filepath:
+        # Delete image
+        try:
+            os.remove(target.filepath)
+        except OSError:
+            pass
+
+
+class File(FileMixin, db.Model):
+    """File model."""
+
+    __tablename__ = "files"
+    _upload_set = files
+
+
+@listens_for(File, "after_delete")
+def delete_file(mapper, connection, target):
+    if target.filepath:
+        # Delete image
+        try:
+            os.remove(target.filepath)
+        except OSError:
+            pass
 
 
 class Permission:
