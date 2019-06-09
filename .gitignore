@@ -3,3 +3,5 @@ __pycache__/
 *.sublime-*
 myapp/
 flask_app/*
+flaskapp
+{{ cookiecutter.project_name }}/migrations
