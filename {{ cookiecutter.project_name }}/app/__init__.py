@@ -37,7 +37,7 @@ from .admin.modelviews import (
 )  # noqa: E402
 
 admin = Admin(
-    name="flask_app", index_view=MyAdminIndexView(), template_mode="bootstrap3"
+    name="{{ cookiecutter.project_name }}", index_view=MyAdminIndexView(), template_mode="bootstrap3"
 )
 
 
