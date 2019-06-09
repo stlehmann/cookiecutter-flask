@@ -1,8 +1,9 @@
 version: '3'
 
 services:
-  flask-app:
+  flaskapp:
     build: .
+    env_file: ./.env
     expose:
       - "5000"  # direct port to the flask application
       - "8000"  # user reverse proxy for fast access to static data
