@@ -1,4 +1,8 @@
 {
     "project_name": "flaskapp",
-    "secret_key": "my very secret secret key"
+    "secret_key": "my very secret secret key",
+    "docker_registry": "",
+    "docker_image": "flaskapp",
+    "remote_host": "",
+    "remote_directory": "/var/docker/flaskapp"
 }
