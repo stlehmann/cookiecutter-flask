@@ -20,3 +20,9 @@ This is a template for structured Flask projects.
 
 * ready-made Dockerfile and docker-compose.yml
 * Environment variables from .env file get transfered in docker image
+
+### manage.py script for deploy/backup/restore web application
+
+* set deployment options in cookiecutter options
+* for automatic login to the remote server you need to setup SSH key
+authorization
