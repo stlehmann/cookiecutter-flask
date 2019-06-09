@@ -1,11 +1,12 @@
-FROM python:alpine
-RUN apk update && apk add nginx
+FROM python:3.7.3-stretch
+RUN apt-get update && apt-get install -y nginx
 RUN mkdir -p /run/nginx
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./requirements.txt /flask-app/requirements.txt
-WORKDIR /flask-app
-RUN pip3 install gunicorn -r requirements.txt
-COPY ./wsgi.py /flask-app/
-COPY ./app/ /flask-app/app
-EXPOSE 5000
+COPY ./requirements.txt /flaskapp/requirements.txt
+COPY ./nginx/flaskapp /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/flaskapp /etc/nginx/sites-enabled/flaskapp
+WORKDIR /flaskapp
+RUN pip3 install -r requirements.txt
+COPY ./wsgi.py /flaskapp/
+COPY ./app/ /flaskapp/app
+EXPOSE 5000 8000
 CMD nginx && gunicorn wsgi:application -b0.0.0.0:5000
