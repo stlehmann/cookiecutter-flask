@@ -1,4 +1,4 @@
 {
-    "project_name": "flask_app",
+    "project_name": "flaskapp",
     "secret_key": "my very secret secret key"
 }
