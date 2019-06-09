@@ -41,6 +41,27 @@ admin = Admin(
 )
 
 
+def init_database(app):
+    from .models import User, Role, Permission
+
+    with app.app_context():
+        db.create_all()
+
+        if "Superuser" not in Role.query.all():
+            superuser_role = Role(name="Superuser", permissions=Permission.ADMINISTER)
+            db.session.add(superuser_role)
+
+        if "User" not in Role.query.all():
+            user_role = Role(name="User", default=True, permissions=Permission.MODIFY)
+            db.session.add(user_role)
+
+        if "admin" not in User.query.all():
+            admin_user = User(username="admin", password="admin", role=superuser_role)
+            db.session.add(admin_user)
+
+        db.session.commit()
+
+
 def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
     """Create Flask application."""
     app = Flask(__name__)
@@ -48,6 +69,8 @@ def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
 
     # init extensions
     db.init_app(app)
+    init_database(app)
+
     migrate.init_app(app, db)
     admin.init_app(app)
     bootstrap.init_app(app)
