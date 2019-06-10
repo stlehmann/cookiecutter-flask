@@ -5,7 +5,7 @@
 
 :created on 2019-03-12 18:08:55
 :last modified by:   stefan
-:last modified time: 2019-06-08 14:04:37
+:last modified time: 2019-06-09 19:39:34
 
 """
 import os
@@ -13,6 +13,7 @@ from . import db, login_manager, images, files
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.event import listens_for
+from .orderable import OrderableModelMixin
 
 
 class FileMixin(db.Model):
@@ -83,6 +84,17 @@ class Role(db.Model):
 
     def __repr__(self):
         return f"<Role \"{self.name}\">"
+
+    def __str__(self):
+        return self.name
+
+
+class StaticPage(OrderableModelMixin, db.Model):
+
+    __tablename__ = "static_pages"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32), unique=True, nullable=False)
+    text = db.Column(db.Text())
 
     def __str__(self):
         return self.name
