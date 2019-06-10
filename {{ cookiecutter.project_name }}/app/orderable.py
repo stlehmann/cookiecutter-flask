@@ -4,7 +4,7 @@
 
 :created on 2019-06-09 19:12:51
 :last modified by:   stefan
-:last modified time: 2019-06-10 11:39:30
+:last modified time: 2019-06-10 12:12:07
 
 """
 from . import db
@@ -19,7 +19,11 @@ def default_order_index(context) -> int:
     if context:
         current_table_name = context.current_column.table.name
         query = db.engine.execute(f"SELECT MAX(\"order_index\") + 1 FROM {current_table_name}")
-        return query.first()[0]
+        order_index = query.first()[0]
+        if order_index is None:
+            return 0
+        else:
+            return order_index
     else:
         return 0
 
@@ -97,7 +101,8 @@ class OrderableModelMixin:
 
 
 class OrderableModelViewMixin:
-    column_default_sort = ("order", False)
+    column_default_sort = ("order_index", False)
+    list_template = "admin/list_orderable_model.html"
 
     @action(
         "move_up",

@@ -4,7 +4,7 @@
 
 :created on 2019-03-15 18:17:57
 :last modified by:   stefan
-:last modified time: 2019-06-10 11:39:58
+:last modified time: 2019-06-10 12:04:12
 
 """
 import os
@@ -150,10 +150,8 @@ class FileModelView(SecureModelView):
 
 class StaticPageModelView(CKEditorMixin, OrderableModelViewMixin, SecureModelView):
 
-    column_default_sort = ("order_index", False)
     column_list = ["name"]
     form_overrides = {"text": CKTextAreaField}
-    list_template = "admin/list_staticpage.html"
     form_rules = [rules.FieldSet(["name", "text"])]
     column_labels = {
         "name": "Name",
