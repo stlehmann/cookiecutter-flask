@@ -4,5 +4,10 @@
     "docker_registry": "",
     "docker_image": "flaskapp",
     "remote_host": "",
-    "remote_directory": "/var/docker/flaskapp"
+    "remote_directory": "/var/docker/flaskapp",
+    "backup_server": "",
+    "backup_username": "",
+    "_copy_without_render": [
+        "*.html"
+    ]
 }
