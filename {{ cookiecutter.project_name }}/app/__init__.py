@@ -34,6 +34,7 @@ from .admin.modelviews import (
     UserModelView,
     ImageModelView,
     FileModelView,
+    StaticPageModelView,
 )  # noqa: E402
 
 admin = Admin(
@@ -47,15 +48,15 @@ def init_database(app):
     with app.app_context():
         db.create_all()
 
-        if "Superuser" not in Role.query.all():
+        if Role.query.filter_by(name="Superuser").count() == 0:
             superuser_role = Role(name="Superuser", permissions=Permission.ADMINISTER)
             db.session.add(superuser_role)
 
-        if "User" not in Role.query.all():
+        if Role.query.filter_by(name="User").count() == 0:
             user_role = Role(name="User", default=True, permissions=Permission.MODIFY)
             db.session.add(user_role)
 
-        if "admin" not in User.query.all():
+        if User.query.filter_by(username="admin").count() == 0:
             admin_user = User(username="admin", password="admin", role=superuser_role)
             db.session.add(admin_user)
 
@@ -90,10 +91,11 @@ def create_app(config_name: str = os.environ.get("FLASK_ENV", "production")):
     app.register_blueprint(main)
 
     # Admin views
-    from .models import User, Image, File
+    from .models import User, Image, File, StaticPage
 
     admin.add_view(ImageModelView(Image, db.session, name="Bilder"))
     admin.add_view(FileModelView(File, db.session, name="Dateien"))
     admin.add_view(UserModelView(User, db.session, name="Benutzer"))
+    admin.add_view(StaticPageModelView(StaticPage, db.session, name="Statische Seiten"))
 
     return app
