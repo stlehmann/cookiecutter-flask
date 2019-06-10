@@ -8,6 +8,6 @@
     "backup_server": "",
     "backup_username": "",
     "_copy_without_render": [
-        "*.html"
+        "app/templates"
     ]
 }
