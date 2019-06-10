@@ -4,7 +4,7 @@
 
 :created on 2019-03-15 18:17:57
 :last modified by:   stefan
-:last modified time: 2019-06-08 15:57:55
+:last modified time: 2019-06-10 11:39:58
 
 """
 import os
@@ -16,6 +16,8 @@ from flask_admin.contrib.sqla import ModelView
 from jinja2 import Markup
 from wtforms.fields import PasswordField
 from .forms import LoginForm
+from .ckeditor import CKEditorMixin, CKTextAreaField
+from ..orderable import OrderableModelViewMixin
 from ..config import IMAGE_DIR, FILE_DIR
 from .. import images, files
 
@@ -144,6 +146,19 @@ class FileModelView(SecureModelView):
                     files.path(form.file.data.filename),
                     files.path(form.filename.data)
                 )
+
+
+class StaticPageModelView(CKEditorMixin, OrderableModelViewMixin, SecureModelView):
+
+    column_default_sort = ("order_index", False)
+    column_list = ["name"]
+    form_overrides = {"text": CKTextAreaField}
+    list_template = "admin/list_staticpage.html"
+    form_rules = [rules.FieldSet(["name", "text"])]
+    column_labels = {
+        "name": "Name",
+        "text": "Text",
+    }
 
 
 class UserModelView(SuperuserModelView):
