@@ -1,0 +1,6 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block tail %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='node_modules/ckeditor/ckeditor.js') }}"></script>
+{% endblock %}

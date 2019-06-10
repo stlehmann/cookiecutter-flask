@@ -1,0 +1,19 @@
+{% extends 'admin/model/list.html' %}
+
+{% block list_row_actions %}
+{{ super() }}
+  <form class="icon" method="POST" action="/admin/staticpage/action/">
+    <input id="action" name="action" value="move_up" type="hidden">
+    <input name="rowid" value="{{ get_pk_value(row) }}" type="hidden">
+    <button onclick="" title="Approve">
+      <span class="fa fa-ok glyphicon glyphicon-arrow-up"></span>
+    </button>
+  </form>
+  <form class="icon" method="POST" action="/admin/staticpage/action/">
+    <input id="action" name="action" value="move_down" type="hidden">
+    <input name="rowid" value="{{ get_pk_value(row) }}" type="hidden">
+    <button onclick="" title="Approve">
+      <span class="fa fa-ok glyphicon glyphicon-arrow-down"></span>
+    </button>
+  </form>
+{% endblock %}
