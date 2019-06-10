@@ -4,7 +4,7 @@
 
 :created on 2019-06-09 19:12:51
 :last modified by:   stefan
-:last modified time: 2019-06-09 19:33:35
+:last modified time: 2019-06-10 11:39:30
 
 """
 from . import db
@@ -105,9 +105,8 @@ class OrderableModelViewMixin:
         "Sollen die ausgewählten Elemente nach oben verschoben werden?",
     )
     def action_move_up(self, ids):
-        cls = self.__class__
-        selected = cls.query.filter(cls.id.in_(ids)).order_by(
-            cls.order
+        selected = self.model.query.filter(self.model.id.in_(ids)).order_by(
+            self.model.order_index
         )
         for item in selected:
             item.move_up()
@@ -119,9 +118,8 @@ class OrderableModelViewMixin:
         "Sollen die ausgewählten Elemente nach unten verschoben werden?",
     )
     def action_move_down(self, ids):
-        cls = self.__class__
-        selected = cls.query.filter(cls.id.in_(ids)).order_by(
-            cls.order.desc()
+        selected = self.model.query.filter(self.model.id.in_(ids)).order_by(
+            self.model.order_index.desc()
         )
         for item in selected:
             item.move_down()
